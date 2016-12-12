@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "190433117320",
+    "firebase_url": "https://snowtotals-68015.firebaseio.com",
+    "project_id": "snowtotals-68015",
+    "storage_bucket": "snowtotals-68015.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190433117320:android:b5572d9725e3f779",
+        "android_client_info": {
+          "package_name": "com.example.snowiot.snowiotsimple"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "190433117320-s3a8j843mnq0rk8oj0gtqq8u4eko6okk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.snowiot.snowiotsimple",
+            "certificate_hash": "AF16B066668A82B5A15CAB98C1E862D6163EBE6F"
+          }
+        },
+        {
+          "client_id": "190433117320-cp2ma8qdhddo8sn45d2dbure0ojq993q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCowiiSB0C_4bKVujbVw7cmoptslA3CNlU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "190433117320-cp2ma8qdhddo8sn45d2dbure0ojq993q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
