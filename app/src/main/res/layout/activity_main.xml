@@ -25,24 +25,26 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/sensorListView"
+            android:headerDividersEnabled="false"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:headerDividersEnabled="false"
-            android:id="@+id/sensorListView"
-            android:layout_alignParentBottom="true" />
-    </RelativeLayout>
+            android:cacheColorHint="@color/authui_inputTextColorDark"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="207dp" />
 
-    <Switch
-        android:text="Signal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ledSignal"
-        android:textColor="@android:color/black"
-        android:checked="false"
-        android:layout_marginBottom="51dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        <Switch
+            android:text="Operation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ledSignal"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="110dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:checked="false" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

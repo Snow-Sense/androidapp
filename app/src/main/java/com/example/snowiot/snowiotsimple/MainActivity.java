@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    Switch mSetLedSignal;
     ListView mListView;
 
 
@@ -36,14 +36,16 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
 
             mListView = (ListView) findViewById(R.id.sensorListView);
+            mSetLedSignal = (Switch) findViewById(R.id.ledSignal);
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://snowtotals-68015.firebaseio.com/Chat");
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://snowtotals-68015.firebaseio.com/Sensor1");
+            //DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-            mAdapter = new FirebaseListAdapter<Chat>(this, Chat.class, android.R.layout.two_line_list_item, databaseReference) {
+            FirebaseListAdapter mAdapter = new FirebaseListAdapter<Sensors>(this, Sensors.class, android.R.layout.two_line_list_item, databaseReference) {
                 @Override
-                protected void populateView(View view, Chat chatMessage, int position) {
+                protected void populateView(View view, Sensors chatMessage, int position) {
                     ((TextView)view.findViewById(android.R.id.text1)).setText(chatMessage.getName());
-                    ((TextView)view.findViewById(android.R.id.text2)).setText(chatMessage.getText());
+                    ((TextView)view.findViewById(android.R.id.text2)).setText(chatMessage.getState());
 
                 }
             };
@@ -52,12 +54,28 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mAdapter.cleanup();
-        }
 
+    @Override   //Added this too
+    protected void onStart() {
+        super.onStart();
+
+        //LED Switch block
+        mSetLedSignal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean switchPressed) {
+
+                if (switchPressed) {
+                    Toast.makeText(getApplicationContext(), "Sensors ON.", Toast.LENGTH_SHORT).show(); //Display message on screen.
+                    mLedSignalRef.setValue(1);  //if switch is checked, then set LED signal to 1 (on firebase)
+                } else {
+                    Toast.makeText(getApplicationContext(), "Sensors OFF", Toast.LENGTH_SHORT).show();
+                    mLedSignalRef.setValue(0);  //if switch is not checked, then set LED signal to 0 (on firebase)
+                }
+
+            }
+        });
+
+    }
 
 
 
