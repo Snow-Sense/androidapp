@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">snowiotsimple</string>
+    <string name="action_credits">Credits</string>
+    <string name="action_blog">Blog</string>
+    <string name="action_signout">Sign Out</string>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -13,37 +14,45 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/ledSignal"
-        android:layout_marginBottom="77dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_marginBottom="52dp">
+
 
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/sensorListView"
             android:headerDividersEnabled="false"
-            android:layout_alignParentTop="true"
+            android:cacheColorHint="@color/authui_inputTextColorDark"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:cacheColorHint="@color/authui_inputTextColorDark"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="120dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="207dp" />
+            android:layout_marginBottom="106dp" />
 
         <Switch
-            android:text="Operation"
+            android:text="Enable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ledSignal"
             android:textColor="@android:color/black"
-            android:layout_marginBottom="110dp"
+            android:layout_marginBottom="72dp"
+            android:checked="false"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:checked="false" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="310dp"
+            android:id="@+id/snowIotText"/>
 
     </RelativeLayout>
 
