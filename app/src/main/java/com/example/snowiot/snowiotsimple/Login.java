@@ -47,7 +47,7 @@ public class Login extends AppCompatActivity {
             if(firebaseAuth.getCurrentUser() != null) {             //If getCurrentUser == null, user has not logged in. if != null, user has logged in.
 
                 startActivity(new Intent(Login.this, MainActivity.class)); //if user is logged in, start new intent from Login activity to MainActivity.
-
+                finish();                                                  //end activity
             }
 
             }

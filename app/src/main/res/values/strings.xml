@@ -3,4 +3,7 @@
     <string name="action_credits">Credits</string>
     <string name="action_blog">Blog</string>
     <string name="action_signout">Sign Out</string>
+    <string name="action_map">Driveway Sensors</string>
+    <string name="title_activity_credits">Credits</string>
+    <string name="title_activity_login">Sign-In</string>
 </resources>

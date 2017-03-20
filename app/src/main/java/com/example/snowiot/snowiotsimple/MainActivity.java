@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     ListView mListView;
     ImageView snowIotTitle;
 
-
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mLedSignalRef = mRootRef.child("ledSignal");    //reference to LED status variable
 
@@ -47,16 +46,19 @@ public class MainActivity extends AppCompatActivity {
             mSetLedSignal = (Switch) findViewById(R.id.ledSignal);
             snowIotTitle = (ImageView) findViewById(R.id.snowIotText);
 
+
             Picasso.with(getApplicationContext()).load("http://i.imgur.com/qoku2bl.png").into(snowIotTitle); //pass image into imgview
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://snowtotals-68015.firebaseio.com/Sensor1");
             //DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-            FirebaseListAdapter mAdapter = new FirebaseListAdapter<Sensors>(this, Sensors.class, android.R.layout.two_line_list_item, databaseReference) {          //Listview using Sensors class
+            FirebaseListAdapter mAdapter = new FirebaseListAdapter<Sensors>(this, Sensors.class, android.R.layout.simple_list_item_2, databaseReference) {          //Listview using Sensors class
                 @Override
                 protected void populateView(View view, Sensors chatMessage, int position) {
                     ((TextView)view.findViewById(android.R.id.text1)).setText(chatMessage.getName());
+                    ((TextView)view.findViewById(android.R.id.text1)).setTextSize(24);
                     ((TextView)view.findViewById(android.R.id.text2)).setText(chatMessage.getState());
+                    ((TextView)view.findViewById(android.R.id.text2)).setTextSize(18);
 
                 }
             };
@@ -111,17 +113,26 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.action_map) {
+            Intent drivewaySensorsMap = new Intent(MainActivity.this, maps.class);
+            startActivity(drivewaySensorsMap);
+            return true;
+        }
+
         if (id == R.id.action_signout) {
             FirebaseAuth.getInstance().signOut();
-            finish();
+            Intent returnToLoginScreen = new Intent(MainActivity.this, Login.class);
+            startActivity(returnToLoginScreen);
+            finish();   //end main activity after logging out
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
 //Back button won't close MainActivity
-    @Override
+  /*  @Override
     public void onBackPressed() {
         moveTaskToBack(false);
     }
+    */
 }
