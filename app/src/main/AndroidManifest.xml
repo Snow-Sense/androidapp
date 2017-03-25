@@ -5,6 +5,7 @@
     <user-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".GlobalVariables"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="SnowSense"
@@ -30,7 +31,8 @@
         <activity android:name=".Credits" />
         <activity android:name=".MainActivity" />
         <activity android:name=".maps" />
-        <activity android:name=".GeoMap"></activity>
+        <activity android:name=".GeoMap" />
+        <activity android:name=".Settings"></activity>
     </application>
 
 </manifest>

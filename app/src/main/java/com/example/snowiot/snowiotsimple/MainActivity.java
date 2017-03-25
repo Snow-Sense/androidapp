@@ -3,6 +3,7 @@ package com.example.snowiot.snowiotsimple;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,9 +31,15 @@ import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
+    //to check if user is already or still logged in
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    //define firebase auth
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+
     Switch mSetLedSignal;
     ListView mListView;
-    ImageView snowIotTitle;
+//    ImageView snowIotTitle;
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mLedSignalRef = mRootRef.child("ledSignal");    //reference to LED status variable
@@ -44,13 +52,29 @@ public class MainActivity extends AppCompatActivity {
 
             mListView = (ListView) findViewById(R.id.sensorListView);
             mSetLedSignal = (Switch) findViewById(R.id.ledSignal);
-            snowIotTitle = (ImageView) findViewById(R.id.snowIotText);
+//            snowIotTitle = (ImageView) findViewById(R.id.snowIotText);
 
+//            Picasso.with(getApplicationContext()).load("http://i.imgur.com/qoku2bl.png").into(snowIotTitle); //pass image into imgview
 
-            Picasso.with(getApplicationContext()).load("http://i.imgur.com/qoku2bl.png").into(snowIotTitle); //pass image into imgview
+            mAuthListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://snowtotals-68015.firebaseio.com/Sensor1");
-            //DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                    if(firebaseAuth.getCurrentUser() == null) {             //If getCurrentUser == null no user is logged in.
+
+                        startActivity(new Intent(MainActivity.this, Login.class)); //if user is not logged in, go back to login activity and end main activity.
+                        finish();                                                  //end activity
+                    }
+
+                }
+            };
+
+            mAuth = FirebaseAuth.getInstance();         //get current instance of whos authenticated
+            mUser = FirebaseAuth.getInstance().getCurrentUser();        //get current user, note FirebaseUser is not the same as FirebaseAuth
+
+            ((GlobalVariables) this.getApplication()).storeUserUID(mUser.getUid());      //store useruid in a global variable so that it can be accessed by all activities
+
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://snowtotals-68015.firebaseio.com/sensors/" + mUser.getUid() + "/livesensor");      //dynamic reference based on user logged in
 
             FirebaseListAdapter mAdapter = new FirebaseListAdapter<Sensors>(this, Sensors.class, android.R.layout.simple_list_item_2, databaseReference) {          //Listview using Sensors class
                 @Override
@@ -58,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     ((TextView)view.findViewById(android.R.id.text1)).setText(chatMessage.getName());
                     ((TextView)view.findViewById(android.R.id.text1)).setTextSize(24);
                     ((TextView)view.findViewById(android.R.id.text2)).setText(chatMessage.getState());
-                    ((TextView)view.findViewById(android.R.id.text2)).setTextSize(18);
+                    ((TextView)view.findViewById(android.R.id.text2)).setTextSize(24);
 
                 }
             };
@@ -88,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mAuth.addAuthStateListener(mAuthListener);  //Add authenticator state listener
+
+
     }
 
 //Code by Andres Menendez (Youtube)
@@ -116,6 +143,12 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_map) {
             Intent drivewaySensorsMap = new Intent(MainActivity.this, maps.class);
             startActivity(drivewaySensorsMap);
+            return true;
+        }
+
+        if (id == R.id.action_settings) {
+            Intent userSettings = new Intent(MainActivity.this, Settings.class);
+            startActivity(userSettings);
             return true;
         }
 

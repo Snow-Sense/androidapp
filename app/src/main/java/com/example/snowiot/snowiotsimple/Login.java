@@ -22,6 +22,7 @@ public class Login extends AppCompatActivity {
     //to check if user is already or still logged in
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+
     private EditText mEmailField;
     private EditText mPasswordField;
 

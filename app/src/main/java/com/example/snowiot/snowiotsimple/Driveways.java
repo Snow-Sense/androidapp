@@ -12,14 +12,16 @@ public class Driveways {
     private double latitude;
     private double longitude;
     private boolean serviceRequest;
+    private String type;
     public Address address;
 
 
     public Driveways() {
-        name = "EMPTY";
+        name = "null";
         latitude = 1.0;
         longitude = 1.0;
         serviceRequest = false;
+        type = "null";
     }
 
     public String getName()
@@ -42,6 +44,8 @@ public class Driveways {
         return serviceRequest;
     }
 
+    public String getType() {return type; }
+
 public Map<String, Object> toMap()
 {
     HashMap<String, Object> userMapInfo = new HashMap<>();
@@ -49,6 +53,7 @@ public Map<String, Object> toMap()
     userMapInfo.put("latitude", latitude);
     userMapInfo.put("longitude", longitude);
     userMapInfo.put("serviceRequest", serviceRequest);
+    userMapInfo.put("type", type);
     userMapInfo.put("address", address);
 
     return userMapInfo;
