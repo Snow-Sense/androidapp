@@ -2,8 +2,12 @@ package com.example.snowiot.snowiotsimple;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -20,7 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-public class maps extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class maps extends AppCompatActivity implements OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener{
 
     GoogleMap drivewayMap;                                                                                   //necessary to be able to use google maps functions
 
@@ -29,6 +34,7 @@ public class maps extends AppCompatActivity implements OnMapReadyCallback, Googl
         super.onCreate(savedInstanceState);
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
+
 
         FirebaseDatabase Database = FirebaseDatabase.getInstance();
 
@@ -51,10 +57,36 @@ public class maps extends AppCompatActivity implements OnMapReadyCallback, Googl
                 .title("Marker in Sydney"));
         drivewayMap.moveCamera(CameraUpdateFactory.newLatLng(sydney)); */
 
-
+//        drivewayMap.setMyLocationEnabled(true);
         loadDrivewayLocations();
 
-        drivewayMap.setOnMarkerClickListener(this);
+        drivewayMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter(){
+
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                View v = getLayoutInflater().inflate(R.layout.map_information_window, null);
+
+                TextView markerName = (TextView) v.findViewById(R.id.infoName);
+                TextView markerAddress = (TextView) v.findViewById(R.id.infoAddress);
+                ImageView driveWayImage = (ImageView) v.findViewById(R.id.infoWindowPicture);
+
+                Picasso.with(getApplicationContext()).load("https://static.concretenetwork.com/photo-gallery/images/1200x625Exact/concrete-driveways_8/stamped-concrete-driveway-d-e-contreras-construction_61246.jpg").into(driveWayImage); //pass image into imgview
+
+                markerName.setText(marker.getTitle());
+                markerAddress.setText(marker.getSnippet());
+
+                return v;
+            }
+        });
+
+
+//        drivewayMap.setOnMarkerClickListener(this);
     }
 
     public void loadDrivewayLocations() {
@@ -69,15 +101,23 @@ public class maps extends AppCompatActivity implements OnMapReadyCallback, Googl
                 for (DataSnapshot dataSnapshot1 : dataSnapshots) {
                     Driveways driveway = dataSnapshot1.getValue(Driveways.class);
 
-                    if ((driveway.getServiceRequest() == true)&&(driveway.getType().equals("sensor"))) {
+                    if ((driveway.getServiceRequest() == true)&&(driveway.getType().equals("sensor"))&&(driveway.getStatus() == 1)) {
                         drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))
-                                .title(driveway.getName())
+                                .title(driveway.getName())                                                                                       //get node name, which should be user UID
                                 .snippet(driveway.address.getStreet() + ", " + driveway.address.getCity() + ", " + driveway.address.getState())    //Tutorial on this code by "GDD Recife" on youtube
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.needsplowing)));
                     }
-                   else if (driveway.getType().equals("plower")) {
+
+                    else if ((driveway.getServiceRequest() == true)&&(driveway.getType().equals("sensor"))&&(driveway.getStatus() == 2)) {
                         drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))
                                 .title(driveway.getName())
+                                .snippet(driveway.address.getStreet() + ", " + driveway.address.getCity() + ", " + driveway.address.getState())    //Tutorial on this code by "GDD Recife" on youtube
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.alreadyplowing)));
+                    }
+
+                    else if (driveway.getType().equals("plower") && (driveway.getStatus() == 1)) {
+                        drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))
+                                .title(dataSnapshot1.getKey())
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.plower)));
                     }
 
@@ -105,8 +145,8 @@ public class maps extends AppCompatActivity implements OnMapReadyCallback, Googl
 ////                    marker.getTitle() +
 ////                            " has been clicked " + clickCount + " times.",
 ////                    Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, marker.getTitle(),
-                    Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, marker.getTitle(),
+                Toast.LENGTH_SHORT).show();
 
 //        }
 
@@ -115,5 +155,7 @@ public class maps extends AppCompatActivity implements OnMapReadyCallback, Googl
         // marker is centered and for the marker's info window to open, if it has one).
         return false;
     }
+
+
 
 }

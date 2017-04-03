@@ -14,6 +14,7 @@ public class Driveways {
     private boolean serviceRequest;
     private String type;
     public Address address;
+    public int status;                   //0 = unavailable, 1 = available, 2 = already being serviced
 
 
     public Driveways() {
@@ -22,11 +23,17 @@ public class Driveways {
         longitude = 1.0;
         serviceRequest = false;
         type = "null";
+        status = 0;
     }
 
     public String getName()
     {
         return name;
+    }
+
+    public void setName(String drivewayName)
+    {
+        name = drivewayName;
     }
 
     public double getLatitude()
@@ -46,6 +53,8 @@ public class Driveways {
 
     public String getType() {return type; }
 
+    public int getStatus() {return status; }
+
 public Map<String, Object> toMap()
 {
     HashMap<String, Object> userMapInfo = new HashMap<>();
@@ -55,6 +64,7 @@ public Map<String, Object> toMap()
     userMapInfo.put("serviceRequest", serviceRequest);
     userMapInfo.put("type", type);
     userMapInfo.put("address", address);
+    userMapInfo.put("status", status);
 
     return userMapInfo;
 }

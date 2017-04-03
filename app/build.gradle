@@ -39,7 +39,8 @@ dependencies {
     compile 'com.android.support:design:25.2.0'
 
 
-    compile 'com.google.android.gms:play-services-maps:10.0.0'
+//    compile 'com.google.android.gms:play-services-maps:10.0.0'
+    compile 'com.google.android.gms:play-services:10.0.0'
 
     //Geofire
     compile 'com.firebase:geofire-android:2.1.1'
