@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.snowiot.snowiotsimple">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <user-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:name=".GlobalVariables"
@@ -32,7 +40,10 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".maps" />
         <activity android:name=".GeoMap" />
-        <activity android:name=".Settings"></activity>
+        <activity android:name=".Settings" />
+        <activity android:name=".DrivewayPhoto" />
+        <activity android:name=".maps_servicemode" />
+        <activity android:name=".ContactSensorOwner"></activity>
     </application>
 
 </manifest>

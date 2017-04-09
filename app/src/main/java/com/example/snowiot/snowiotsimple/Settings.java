@@ -17,7 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Settings extends AppCompatActivity {
 
-TextView mBaseHeight;
+    TextView mBaseHeight;
     Button mRecalibrate;
     Switch mToggleDisplayActualDepth;
 

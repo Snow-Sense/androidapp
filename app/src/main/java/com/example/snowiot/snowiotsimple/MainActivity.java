@@ -37,59 +37,76 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
 
-    Switch mSetLedSignal;
-    ListView mListView;
+    private Switch mSetLedSignal;
+    private ListView mListView;
 //    ImageView snowIotTitle;
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mLedSignalRef = mRootRef.child("ledSignal");    //reference to LED status variable
 
+    String userType;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
 
-            mListView = (ListView) findViewById(R.id.sensorListView);
-            mSetLedSignal = (Switch) findViewById(R.id.ledSignal);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mListView = (ListView) findViewById(R.id.sensorListView);
+        mSetLedSignal = (Switch) findViewById(R.id.ledSignal);
 //            snowIotTitle = (ImageView) findViewById(R.id.snowIotText);
 
 //            Picasso.with(getApplicationContext()).load("http://i.imgur.com/qoku2bl.png").into(snowIotTitle); //pass image into imgview
 
-            mAuthListener = new FirebaseAuth.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-                    if(firebaseAuth.getCurrentUser() == null) {             //If getCurrentUser == null no user is logged in.
+                if (firebaseAuth.getCurrentUser() == null) {             //If getCurrentUser == null no user is logged in.
 
-                        startActivity(new Intent(MainActivity.this, Login.class)); //if user is not logged in, go back to login activity and end main activity.
-                        finish();                                                  //end activity
-                    }
-
+                    startActivity(new Intent(MainActivity.this, Login.class)); //if user is not logged in, go back to login activity and end main activity.
+                    finish();                                                  //end activity
+                    finish();                                                  //end activity
                 }
-            };
 
-            mAuth = FirebaseAuth.getInstance();         //get current instance of whos authenticated
-            mUser = FirebaseAuth.getInstance().getCurrentUser();        //get current user, note FirebaseUser is not the same as FirebaseAuth
+            }
+        };
 
-            ((GlobalVariables) this.getApplication()).storeUserUID(mUser.getUid());      //store useruid in a global variable so that it can be accessed by all activities
+        mAuth = FirebaseAuth.getInstance();         //get current instance of whos authenticated
+        mUser = FirebaseAuth.getInstance().getCurrentUser();        //get current user, note FirebaseUser is not the same as FirebaseAuth
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://snowtotals-68015.firebaseio.com/sensors/" + mUser.getUid() + "/livesensor");      //dynamic reference based on user logged in
+        ((GlobalVariables) this.getApplication()).storeUserUID(mUser.getUid());      //store useruid in a global variable so that it can be accessed by all activities
 
-            FirebaseListAdapter mAdapter = new FirebaseListAdapter<Sensors>(this, Sensors.class, android.R.layout.simple_list_item_2, databaseReference) {          //Listview using Sensors class
-                @Override
-                protected void populateView(View view, Sensors chatMessage, int position) {
-                    ((TextView)view.findViewById(android.R.id.text1)).setText(chatMessage.getName());
-                    ((TextView)view.findViewById(android.R.id.text1)).setTextSize(24);
-                    ((TextView)view.findViewById(android.R.id.text2)).setText(chatMessage.getState());
-                    ((TextView)view.findViewById(android.R.id.text2)).setTextSize(24);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://snowtotals-68015.firebaseio.com/sensors/" + mUser.getUid() + "/livesensor");      //dynamic reference based on user logged in
 
-                }
-            };
-            mListView.setAdapter(mAdapter);
+        //Determine user type at the main activity so that when other activities are called, a different activity will be called depending on whether user is snowplow owner or sensor owner.
+        DatabaseReference mUserTypeRef = mRootRef.child("driveways/" + mUser.getUid() + "/type");
+        mUserTypeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userType = dataSnapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        FirebaseListAdapter mAdapter = new FirebaseListAdapter<Sensors>(this, Sensors.class, android.R.layout.simple_list_item_2, databaseReference) {          //Listview using Sensors class
+            @Override
+            protected void populateView(View view, Sensors chatMessage, int position) {
+                ((TextView) view.findViewById(android.R.id.text1)).setText(chatMessage.getName());
+                ((TextView) view.findViewById(android.R.id.text1)).setTextSize(24);
+                ((TextView) view.findViewById(android.R.id.text2)).setText(chatMessage.getState());
+                ((TextView) view.findViewById(android.R.id.text2)).setTextSize(24);
+
+            }
+        };
+        mListView.setAdapter(mAdapter);
 
 
-        }
+    }
 
 
     @Override   //Added this too
@@ -117,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//Code by Andres Menendez (Youtube)
+    //Code by Andres Menendez (Youtube)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -148,6 +165,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_settings) {
             Intent userSettings = new Intent(MainActivity.this, Settings.class);
+            startActivity(userSettings);
+            return true;
+        }
+
+        if (id == R.id.action_drivewayphoto) {
+            Intent userSettings = new Intent(MainActivity.this, DrivewayPhoto.class);
             startActivity(userSettings);
             return true;
         }

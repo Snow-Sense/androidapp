@@ -22,6 +22,11 @@
         android:orderInCategory="100"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/action_drivewayphoto"
+        android:title="Photo"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/action_signout"
         android:title="Sign Out"
         android:orderInCategory="100"
