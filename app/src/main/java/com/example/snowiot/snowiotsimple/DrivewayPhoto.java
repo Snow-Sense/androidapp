@@ -26,6 +26,7 @@ import java.io.IOException;
 public class DrivewayPhoto extends AppCompatActivity {
 
 //Credits to "TVAC Studio" on youtube for step-by-step tutorial on how to get firebase storage, and picture upload working.
+// This is an experimental activity.
 
     Button mUpload;
     ImageView mDrivewayPicture;

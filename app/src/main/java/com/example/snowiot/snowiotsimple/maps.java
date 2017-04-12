@@ -17,6 +17,7 @@
 package com.example.snowiot.snowiotsimple;
 
 import android.*;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +63,8 @@ public class maps extends AppCompatActivity implements
         GoogleMap.OnMarkerClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    private Button mContactSensorOwner;
+
     /**
      * Request code for location permission request.
      *
@@ -86,6 +90,8 @@ public class maps extends AppCompatActivity implements
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
 
+        mContactSensorOwner = (Button) findViewById(R.id.startService);
+
 
         FirebaseDatabase Database = FirebaseDatabase.getInstance();
 
@@ -109,6 +115,17 @@ public class maps extends AppCompatActivity implements
         mLocationRequest.setInterval(60000); // maximum interval to request location, every minute
         mLocationRequest.setFastestInterval(5000); // minimum request interval is 10 seconds
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY); //Best accuracy and battery power balance
+
+
+        mContactSensorOwner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Intent contactUser = new Intent(maps.this, ContactSensorOwner.class);
+                startActivity(contactUser);
+            }
+        });
 
     }
 
@@ -245,7 +262,6 @@ public class maps extends AppCompatActivity implements
 
     @Override
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "Finding your current location.", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
         return false;
