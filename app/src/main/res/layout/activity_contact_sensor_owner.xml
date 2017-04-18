@@ -46,8 +46,8 @@
             android:text="Send Request"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_marginTop="130dp"
-            android:layout_marginLeft="250dp"
+            android:layout_marginTop="120dp"
+            android:layout_marginLeft="245dp"
             android:id="@+id/sendJobRequest" />
     </LinearLayout>
 

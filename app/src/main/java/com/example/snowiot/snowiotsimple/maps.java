@@ -196,14 +196,19 @@ public class maps extends AppCompatActivity implements
                         drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))
                                 .title(dataSnapshot1.getKey())                                                                                       //get node name, which should be user UID
                                 .snippet(driveway.getName() + " at:" + driveway.address.getStreet() + ", " + driveway.address.getCity() + ", " + driveway.address.getState())    //Tutorial on this code by "GDD Recife" on youtube
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));                                                                //Green means operating but not in need of service
                     } else if ((driveway.getServiceRequest() == true) && (driveway.getType().equals("sensor")) && (driveway.getStatus() == 2)) {
                         drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))
                                 .title(dataSnapshot1.getKey())
-                                .snippet(driveway.getName() + " at: " + driveway.address.getStreet() + ", " + driveway.address.getCity() + ", " + driveway.address.getState())    //Tutorial on this code by "GDD Recife" on youtube
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    } else if (driveway.getType().equals("plower") && (driveway.getStatus() == 1)) {
+                                .snippet(driveway.getName() + " at: " + driveway.address.getStreet() + ", " + driveway.address.getCity() + ", " + driveway.address.getState())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));                                                                  //Red means operating and in need of service
+                    } else if ((driveway.getServiceRequest() == true) && (driveway.getType().equals("sensor")) && (driveway.getStatus() == 3)) {
                         drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))
+                                .title(dataSnapshot1.getKey())
+                                .snippet(driveway.getName() + " at: " + driveway.address.getStreet() + ", " + driveway.address.getCity() + ", " + driveway.address.getState())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));                                                                 //Blue means operating and already being serviced by a snowplow
+                    } else if (driveway.getType().equals("plower") && (driveway.getStatus() == 1)) {
+                        drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))                                 //Status: 0 = not on duty, 1 = on duty and standby, 2 = on duty but busy
                                 .title(dataSnapshot1.getKey())
                                 .snippet(driveway.getName())
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.plower)));

@@ -38,12 +38,39 @@
         </activity>
         <activity android:name=".Credits" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".maps" />
+        <activity
+            android:name=".maps"
+            android:label="User Map"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity android:name=".GeoMap" />
         <activity android:name=".Settings" />
         <activity android:name=".DrivewayPhoto" />
         <activity android:name=".maps_servicemode" />
-        <activity android:name=".ContactSensorOwner"></activity>
+        <activity android:name=".ContactSensorOwner" />
+
+        <!-- Parent activity for stack triggered by notification. (Start many activities at once instead of just one) -->
+
+        <activity
+            android:name=".UserContactedWindow"
+            android:label="Accept/Decline Offer"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity android:name=".MapsServiceMode"
+            android:label="Sensor Location"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

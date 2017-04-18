@@ -92,7 +92,9 @@ mUserInfo.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onClick(View v) {
                 mHandleRef.child("prompt").setValue(1);
-                mHandleRef.child("senderID").setValue(((GlobalVariables) getApplication()).getUserUID());
+                mHandleRef.child("senderID").setValue(((GlobalVariables) getApplication()).getUserUID());                    //writes the UID of the sender on the recipient's database section so that the sender's information are loaded on the recipient's screen
+                Toast.makeText(getApplicationContext(), "Offer sent to " + holdUserInfo.getName(), Toast.LENGTH_LONG).show();
+                finish();
             }
         });
 }
