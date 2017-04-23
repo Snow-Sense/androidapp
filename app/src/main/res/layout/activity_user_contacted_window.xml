@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_user_contacted_window"
     android:layout_width="match_parent"
@@ -9,35 +10,6 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     tools:context="com.example.snowiot.snowiotsimple.UserContactedWindow">
-
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="192dp"
-        android:layout_alignParentTop="true">
-
-        <TextView
-            android:text="Name:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12pt"
-            android:id="@+id/contacterName" />
-
-        <TextView
-            android:text="Information:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12pt"
-            android:id="@+id/contacterInfo" />
-
-
-
-    </LinearLayout>
 
 
     <Button
@@ -57,13 +29,37 @@
         android:id="@+id/declineContacter" />
 
 
-    <Button
-        android:text="Notification"
+    <ImageView
         android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="400dp"
-        android:layout_marginLeft="15dp"
-        android:id="@+id/notifytest" />
+        android:layout_height="200dp"
+        app:srcCompat="@color/authui_inputTextColor"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/snowPlowPhoto"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/contacterName" />
+
+    <TextView
+        android:text="Provider:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12pt"
+        android:id="@+id/contacterName"
+        android:layout_above="@+id/contacterInfo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12pt"
+        android:id="@+id/contacterInfo"
+        android:layout_marginBottom="122dp"
+        android:layout_alignBottom="@+id/hireContacter"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

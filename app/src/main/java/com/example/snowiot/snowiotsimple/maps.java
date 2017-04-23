@@ -60,8 +60,9 @@ import com.squareup.picasso.Picasso;
 public class maps extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMyLocationButtonClickListener,
-        GoogleMap.OnMarkerClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+    int zoomInOnMapOnceFlag = 0;
 
     private Button mContactSensorOwner;
 
@@ -82,6 +83,7 @@ public class maps extends AppCompatActivity implements
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private FusedLocationProviderApi mFusedLocationProviderApi = LocationServices.FusedLocationApi;
+
 
 
     @Override
@@ -113,7 +115,7 @@ public class maps extends AppCompatActivity implements
 
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(60000); // maximum interval to request location, every minute
-        mLocationRequest.setFastestInterval(5000); // minimum request interval is 10 seconds
+        mLocationRequest.setFastestInterval(10000); // minimum request interval is 10 seconds
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY); //Best accuracy and battery power balance
 
 
@@ -171,7 +173,7 @@ public class maps extends AppCompatActivity implements
 
                 ((GlobalVariables) getApplication()).setUserUIDFromMap(marker.getTitle());
 
-                Toast.makeText(getApplicationContext(), "User information obtained. Proceed to 'services' window to begin.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "User information obtained. Press 'Contact' to begin.", Toast.LENGTH_SHORT).show();
 
 
                 return v;
@@ -183,6 +185,7 @@ public class maps extends AppCompatActivity implements
     public void loadDrivewayLocations() {
 
         DatabaseReference drivewaysRef = FirebaseDatabase.getInstance().getReference("driveways");
+        final String userUID = ((GlobalVariables) getApplication()).getUserUID();
 
         drivewaysRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -192,22 +195,28 @@ public class maps extends AppCompatActivity implements
                 for (DataSnapshot dataSnapshot1 : dataSnapshots) {
                     Driveways driveway = dataSnapshot1.getValue(Driveways.class);
 
-                    if ((driveway.getServiceRequest() == true) && (driveway.getType().equals("sensor")) && (driveway.getStatus() == 1)) {
+                    if ((dataSnapshot1.getKey().equals(userUID))&&(driveway.getStatus() != 0)&&(zoomInOnMapOnceFlag == 0)) {
+                        drivewayMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(driveway.getLatitude(), driveway.getLongitude()), 11));          //zoom in on user's marker
+                        zoomInOnMapOnceFlag = 1;   //makes it so that the map doesn't zoom in everytime there is an update
+                    }
+
+
+                    if ((driveway.getType().equals("sensor")) && (driveway.getStatus() == 1)) {
                         drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))
                                 .title(dataSnapshot1.getKey())                                                                                       //get node name, which should be user UID
                                 .snippet(driveway.getName() + " at:" + driveway.address.getStreet() + ", " + driveway.address.getCity() + ", " + driveway.address.getState())    //Tutorial on this code by "GDD Recife" on youtube
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));                                                                //Green means operating but not in need of service
-                    } else if ((driveway.getServiceRequest() == true) && (driveway.getType().equals("sensor")) && (driveway.getStatus() == 2)) {
+                    } else if ((driveway.getType().equals("sensor")) && (driveway.getStatus() == 2)) {
                         drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))
                                 .title(dataSnapshot1.getKey())
                                 .snippet(driveway.getName() + " at: " + driveway.address.getStreet() + ", " + driveway.address.getCity() + ", " + driveway.address.getState())
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));                                                                  //Red means operating and in need of service
-                    } else if ((driveway.getServiceRequest() == true) && (driveway.getType().equals("sensor")) && (driveway.getStatus() == 3)) {
+                    } else if ((driveway.getType().equals("sensor")) && (driveway.getStatus() == 3)) {
                         drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))
                                 .title(dataSnapshot1.getKey())
                                 .snippet(driveway.getName() + " at: " + driveway.address.getStreet() + ", " + driveway.address.getCity() + ", " + driveway.address.getState())
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));                                                                 //Blue means operating and already being serviced by a snowplow
-                    } else if (driveway.getType().equals("plower") && (driveway.getStatus() == 1)) {
+                    } else if (driveway.getType().equals("plower") && (driveway.getStatus() != 0) && (!(dataSnapshot1.getKey().equals(userUID)))) {
                         drivewayMap.addMarker(new MarkerOptions().position(new LatLng(driveway.getLatitude(), driveway.getLongitude()))                                 //Status: 0 = not on duty, 1 = on duty and standby, 2 = on duty but busy
                                 .title(dataSnapshot1.getKey())
                                 .snippet(driveway.getName())
@@ -224,31 +233,31 @@ public class maps extends AppCompatActivity implements
         });
     }
 
-    @Override
-    public boolean onMarkerClick(final Marker marker) {
-
+//    @Override
+//    public boolean onMarkerClick(final Marker marker) {
+//
 //         Retrieve the data from the marker.
 //        Integer clickCount = (Integer) marker.getTag();
 //
 //        // Check if a click count was set, then display the click count.
-////        if (clickCount != null) {
-////            clickCount = clickCount + 1;
-////            marker.setTag(clickCount);
-////            Toast.makeText(this,
-////                    marker.getTitle() +
-////                            " has been clicked " + clickCount + " times.",
-////                    Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, marker.getTitle(),
-                Toast.LENGTH_SHORT).show();
-
-
+//        if (clickCount != null) {
+//            clickCount = clickCount + 1;
+//            marker.setTag(clickCount);
+//            Toast.makeText(this,
+//                    marker.getTitle() +
+//                            " has been clicked " + clickCount + " times.",
+//                    Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, marker.getTitle(),
+//                Toast.LENGTH_SHORT).show();
+//
+//
 //        }
-
-        // Return false to indicate that we have not consumed the event and that we wish
-        // for the default behavior to occur (which is for the camera to move such that the
-        // marker is centered and for the marker's info window to open, if it has one).
-        return false;
-    }
+//
+//        // Return false to indicate that we have not consumed the event and that we wish
+//        // for the default behavior to occur (which is for the camera to move such that the
+//        // marker is centered and for the marker's info window to open, if it has one).
+//        return false;
+//    }
 
     /**
      * Enables the My Location layer if the fine location permission has been granted.

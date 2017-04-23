@@ -18,8 +18,8 @@ import com.google.firebase.database.ValueEventListener;
 public class Settings extends AppCompatActivity {
 
     TextView mBaseHeight;
-    Button mRecalibrate;
-    Switch mToggleDisplayActualDepth;
+    Button mRecalibrate, mRequestService;
+    Switch mToggleDisplayActualDepth, mEnableSnowWarnings, mShowUserOnMap;
 
 //    DatabaseReference mUserRootRef = FirebaseDatabase.getInstance().getReference();
 //    DatabaseReference mUserRootRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://snowtotals-68015.firebaseio.com/users/" + ((GlobalVariables) this.getApplication()).getUserUID());
@@ -35,7 +35,10 @@ public class Settings extends AppCompatActivity {
 
         mBaseHeight = (TextView) findViewById(R.id.baseheight);
         mRecalibrate = (Button) findViewById(R.id.recalibrate);
+        mRequestService = (Button) findViewById(R.id.requestService);
         mToggleDisplayActualDepth = (Switch) findViewById(R.id.snowdepthswitch);
+        mEnableSnowWarnings = (Switch) findViewById(R.id.enableSnowWarning);
+        mShowUserOnMap = (Switch) findViewById(R.id.showUserOnMap);
 
 
     }
@@ -44,13 +47,16 @@ public class Settings extends AppCompatActivity {
         super.onStart();
 
         //Base Height Value Display
-        DatabaseReference mUserRootRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://snowtotals-68015.firebaseio.com/users/" + ((GlobalVariables) this.getApplication()).getUserUID());     //Do not place this outside of onStart or onCreate functions as the global variable crashes the app
+//        DatabaseReference mUserRootRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://snowtotals-68015.firebaseio.com/users/" + ((GlobalVariables) this.getApplication()).getUserUID());     //Do not place this outside of onStart or onCreate functions as the global variable crashes the app
+        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mUserRootRef = mRootRef.child("users/" + ((GlobalVariables) this.getApplication()).getUserUID());
+        DatabaseReference mUserDrivewayRef = mRootRef.child("driveways/" + ((GlobalVariables) this.getApplication()).getUserUID());
         DatabaseReference mCalibrationValue = mUserRootRef.child("fixedHeight");
 
         mCalibrationValue.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int baseHeight = dataSnapshot.getValue(int.class);
+                float baseHeight = dataSnapshot.getValue(Float.class);
                 mBaseHeight.setText(String.valueOf(baseHeight));
             }
 
@@ -76,6 +82,44 @@ public class Settings extends AppCompatActivity {
 
             }
         });
+
+        final DatabaseReference mSnowWarningEnable = mUserRootRef.child("snowwarning/enableWarning");
+        mEnableSnowWarnings.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean switchPressed) {
+
+                if (switchPressed) {
+                    mSnowWarningEnable.setValue(1);
+                } else {
+                    mSnowWarningEnable.setValue(0);
+                }
+
+            }
+        });
+
+
+        final DatabaseReference mAllowSnowPlowRequests = mUserDrivewayRef.child("status");
+        mShowUserOnMap.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean switchPressed) {
+
+                if (switchPressed) {
+                    mAllowSnowPlowRequests.setValue(1);
+                } else {
+                    mAllowSnowPlowRequests.setValue(0);
+                }
+
+            }
+        });
+
+        mRequestService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAllowSnowPlowRequests.setValue(2);                         //Red marker = available for service
+            }
+        });
+
+
 
         //Set flag for microcontroller to get a new initial value and store on database
         final DatabaseReference mRecalibrateFlag = mUserRootRef.child("setNewBaseHeight");

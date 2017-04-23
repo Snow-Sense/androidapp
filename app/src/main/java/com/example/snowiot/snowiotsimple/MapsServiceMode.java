@@ -20,6 +20,9 @@ package com.example.snowiot.snowiotsimple;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Switch;
 
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,13 +43,16 @@ public class MapsServiceMode extends AppCompatActivity implements
         OnMapReadyCallback{
 
     GoogleMap drivewayMap;                                                                                   //necessary to be able to use google maps functions
-
+    Button mCancelJob;
+    Button mJobFinished;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_service_mode);
 
+        mCancelJob = (Button) findViewById(R.id.cancelService);
+        mJobFinished = (Button) findViewById(R.id.jobFinish);
 
         FirebaseDatabase Database = FirebaseDatabase.getInstance();
 
@@ -56,6 +62,34 @@ public class MapsServiceMode extends AppCompatActivity implements
                 .findFragmentById(R.id.mapServiceMode);
         mapFragment.getMapAsync(this);
 
+        if ((((GlobalVariables) getApplication()).getUserUID() != null) && (((GlobalVariables) getApplication()).getJobDeliveredToUID() != null)){
+
+            final DatabaseReference snowPlowDbRef = FirebaseDatabase.getInstance().getReference("users/" + ((GlobalVariables) getApplication()).getUserUID());
+            final DatabaseReference sensorOwnerDbRef = FirebaseDatabase.getInstance().getReference("users/" + ((GlobalVariables) getApplication()).getJobDeliveredToUID());
+
+            mCancelJob.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    snowPlowDbRef.child("requesthandle/jobDeliveredToUID").setValue("null");
+                    sensorOwnerDbRef.child("requesthandle/prompt").setValue(2);
+                    sensorOwnerDbRef.child("requesthandle/jobAssignedToUID").setValue("null");
+                    ((GlobalVariables) getApplication()).setJobDeliveredToUID(null);
+                    finish();
+                }
+            });
+
+        mJobFinished.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snowPlowDbRef.child("requesthandle/jobDeliveredToUID").setValue("null");
+                sensorOwnerDbRef.child("requesthandle/prompt").setValue(3);                         //causes user to receive message that their driveway has been plowed and a picture is now available
+                sensorOwnerDbRef.child("requesthandle/jobAssignedToUID").setValue("null");
+                ((GlobalVariables) getApplication()).setJobDeliveredToUID(null);
+                finish();
+            }
+            });
+
+        }
 
     }
 
@@ -64,11 +98,9 @@ public class MapsServiceMode extends AppCompatActivity implements
 
         this.drivewayMap = drivewayMap;
 
-       if(!(((GlobalVariables) getApplication()).getJobDeliveredToUID().equals(null))){
+       if(((GlobalVariables) getApplication()).getJobDeliveredToUID() != null){
            loadUserLocation();
        }
-
-        DatabaseReference userTypeRef = FirebaseDatabase.getInstance().getReference("driveways/" + ((GlobalVariables) this.getApplication()).getUserUID() + "/type");
 
 
     }

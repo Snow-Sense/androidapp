@@ -18,5 +18,44 @@
         android:layout_marginBottom="254dp"
         android:layout_alignParentBottom="true" />
 
+    <Button
+        android:text="Cancel Job"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="22dp"
+        android:id="@+id/cancelService"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="188dp"
+        android:layout_marginStart="188dp" />
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="258dp"
+        android:layout_marginBottom="52dp"
+        android:id="@+id/userInfoList"
+        android:layout_above="@+id/cancelService" />
+
+    <Button
+        android:text="Job Finished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/jobFinish"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_below="@+id/userInfoList"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>

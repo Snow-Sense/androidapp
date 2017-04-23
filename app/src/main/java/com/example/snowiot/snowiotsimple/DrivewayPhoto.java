@@ -31,6 +31,8 @@ public class DrivewayPhoto extends AppCompatActivity {
     Button mUpload;
     ImageView mDrivewayPicture;
 
+    Uri PhotoUri;
+
     static final int REQUEST_TAKE_PHOTO = 1;
 
     private FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
@@ -52,7 +54,7 @@ public class DrivewayPhoto extends AppCompatActivity {
 
 //        Uri photoReceive = mDrivewayPhotoFolder.child("users/" + userUID + "/Chrysanthemum.jpg").getDownloadUrl().getResult();
 
-        mDrivewayPhotoFolder.child("butters.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        mDrivewayPhotoFolder.child("image/1492566684027.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 // Got the download URL for 'users/me/profile.png'
@@ -74,7 +76,7 @@ public class DrivewayPhoto extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
+                intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, PhotoUri);
                 startActivityForResult(intent, REQUEST_TAKE_PHOTO);
 
 
@@ -91,7 +93,7 @@ public class DrivewayPhoto extends AppCompatActivity {
 
         if ((requestCode == REQUEST_TAKE_PHOTO) && (resultCode == RESULT_OK)) {
 
-            Uri PhotoUri = data.getData();
+            PhotoUri = data.getData();
 
 //            .putExtra(MediaStore.EXTRA_OUTPUT, uri);
 

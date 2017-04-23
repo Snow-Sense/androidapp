@@ -1,4 +1,4 @@
-//Code obtained from TVAC studio video tutorial on youtube on how to create user authentication for firebase
+//Code algorithm obtained from TVAC studio video tutorial on youtube on how to create user authentication for firebase
 
 package com.example.snowiot.snowiotsimple;
 
@@ -87,7 +87,7 @@ private void startSignin(){
     //if email and password fields are empty, then solve without a bug
     if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password))
     {
-        Toast.makeText(Login.this, "Information fields are blank.", Toast.LENGTH_LONG).show();
+        Toast.makeText(Login.this, "Please do not leave blank fields.", Toast.LENGTH_LONG).show();
     }
 
     else {
@@ -98,7 +98,7 @@ private void startSignin(){
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (!task.isSuccessful()) {
-                    Toast.makeText(Login.this, "Invalid username or password.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Login.this, "Username or password are invalid.", Toast.LENGTH_LONG).show();
 
                 }
 

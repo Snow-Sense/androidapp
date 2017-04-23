@@ -6,6 +6,8 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
@@ -14,14 +16,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class UserContactedWindow extends AppCompatActivity {
-
 
 
     /**
@@ -41,8 +47,10 @@ public class UserContactedWindow extends AppCompatActivity {
 
     private Button mAcceptService, mDeclineService, mNotificationTest;
     private TextView mContacterName, mContactorInfo;
+    private ImageView mContactorPhoto;
     private Driveways holdContacterInfo;
 
+    private StorageReference mDrivewayPhotoFolder = FirebaseStorage.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +59,10 @@ public class UserContactedWindow extends AppCompatActivity {
 
         mAcceptService = (Button) findViewById(R.id.hireContacter);
         mDeclineService = (Button) findViewById(R.id.declineContacter);
-        mNotificationTest = (Button) findViewById(R.id.notifytest);
+//        mNotificationTest = (Button) findViewById(R.id.notifytest);
         mContacterName = (TextView) findViewById(R.id.contacterName);
         mContactorInfo = (TextView) findViewById(R.id.contacterInfo);
-
+        mContactorPhoto = (ImageView) findViewById(R.id.snowPlowPhoto);
 
         final DatabaseReference mUserHandleRef;
         final DatabaseReference mContactorHandleRef;
@@ -114,76 +122,29 @@ public class UserContactedWindow extends AppCompatActivity {
         });
 
 
-        mNotificationTest.setOnClickListener(new View.OnClickListener() {
+        downloadSnowPlowPhoto();
+
+    }
+
+
+    public void downloadSnowPlowPhoto() {
+
+        String userUID = ((GlobalVariables) this.getApplication()).getContacterUID();
+
+        mDrivewayPhotoFolder.child("users/" + userUID + "/profiledriveway.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onClick(View v) {
-                showNotification();
+            public void onSuccess(Uri uri) {
+
+                Picasso.with(getApplicationContext()).load(uri).into(mContactorPhoto);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
             }
         });
 
 
     }
-
-
-    /**
-     * Area dedicated to notification experiment
-     */
-
-public void showNotification (){
-
-    //Set notification message contents
-    NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new
-            NotificationCompat.Builder(this)
-            .setContentTitle("Test Title")
-            .setContentText("Test Message")
-            .setTicker("Alert New Message")
-            .setAutoCancel(true)                                    //Automatically clear notification when clicked on the task bar
-            .setSmallIcon(R.drawable.com_facebook_button_icon);
-
-    //Set intent pointing to activity that will open when the notification is clicked
-    Intent mainActivity = new Intent(this, MainActivity.class);
-    Intent userContacted = new Intent(this, UserContactedWindow.class);
-
-    //Stackbuilder to make it so that when user hits "back", the app goes to the right place
-    //and doesnt open up another app
-
-    TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
-
-    //Add current parents of activity to this stack
-
-    taskStackBuilder.addParentStack(UserContactedWindow.class);
-
-    //Add intent defined to the stack
-
-    taskStackBuilder.addNextIntent(userContacted);
-
-    //Define action & intent to perform with this intent by another app
-
-    PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
-           PendingIntent.FLAG_UPDATE_CURRENT);          //Check if this intent is already open, if so, then update it instead of opening brand new activity
-
-
-    //Define intent to be launched when the notification is clicked on in the task bar
-
-    notificationBuilder.setContentIntent(pendingIntent);
-
-    //Get manager to notify of events that happen in the background
-
-    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-    //Post notification
-
-    notificationManager.notify(notificationID, notificationBuilder.build());
-
-    //Check whether it is currently on the notifcation window
-
-    notificationActive = true;
-}
-
-
-    /**
-     * End of notification test
-     */
-
 
 }

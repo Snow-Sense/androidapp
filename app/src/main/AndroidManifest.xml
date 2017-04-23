@@ -37,7 +37,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Credits" />
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:label="Sensor Status" />
         <activity
             android:name=".maps"
             android:label="User Map"
@@ -47,10 +49,21 @@
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".GeoMap" />
-        <activity android:name=".Settings" />
-        <activity android:name=".DrivewayPhoto" />
+        <activity
+            android:name=".Settings"
+            android:label="Sensor Settings" />
+        <activity
+            android:name=".DrivewayPhoto"
+            android:label="Send Driveway Photo" />
         <activity android:name=".maps_servicemode" />
-        <activity android:name=".ContactSensorOwner" />
+        <activity
+            android:name=".ContactSensorOwner"
+            android:label="Contact Sensor Owner"
+            android:parentActivityName=".maps">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".maps" />
+        </activity>
 
         <!-- Parent activity for stack triggered by notification. (Start many activities at once instead of just one) -->
 
@@ -63,14 +76,27 @@
                 android:value=".MainActivity" />
         </activity>
 
-        <activity android:name=".MapsServiceMode"
+
+        <activity
+            android:name=".MapsServiceMode"
             android:label="Sensor Location"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity android:name=".UploadPictureActivity" />
 
+
+        <activity android:name=".MyDrivewayPhoto"
+            android:label="Plowed Driveway"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+
+
+        </activity>
     </application>
 
 </manifest>
