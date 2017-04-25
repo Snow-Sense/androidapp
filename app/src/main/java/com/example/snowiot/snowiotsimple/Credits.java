@@ -17,7 +17,6 @@ import com.squareup.picasso.Picasso;
 
 public class Credits extends AppCompatActivity {
 
-    private ImageView mDrivewayPicture;
     private FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
     private StorageReference mDrivewayPhotoFolder = FirebaseStorage.getInstance().getReference();
 
@@ -27,32 +26,9 @@ public class Credits extends AppCompatActivity {
         setContentView(R.layout.activity_credits);
 
 
-        mDrivewayPicture = (ImageView) findViewById(R.id.drivewaypictest);
-
-        downloadDrivewayPhoto();
-
-
 
     }
 
-
-    public void downloadDrivewayPhoto(){
-
-            String userUID = ((GlobalVariables) this.getApplication()).getUserUID();
-
-            mDrivewayPhotoFolder.child("users/" + userUID + "/profiledriveway.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-
-                    Picasso.with(getApplicationContext()).load(uri).into(mDrivewayPicture);
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                }
-            });
-    }
 
 
 

@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
          */
 
 
-        DatabaseReference mTimestampRef = mRootRef.child("materialsTestApril");
+        DatabaseReference mTimestampRef = mRootRef.child("sensors/" + mUser.getUid() + "/storeddata");
         mTimestampRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -335,11 +335,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        if (id == R.id.action_contacterrequest) {
-            Intent userContactedWindow = new Intent(MainActivity.this, MapsServiceMode.class);
-            startActivity(userContactedWindow);
-            return true;
-        }
 
         if (id == R.id.action_signout) {
             FirebaseAuth.getInstance().signOut();

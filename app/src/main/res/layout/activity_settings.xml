@@ -11,25 +11,25 @@
     tools:context="com.example.snowiot.snowiotsimple.Settings">
 
 
-        <Button
-            android:text="Recalibrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="17dp"
-            android:id="@+id/recalibrate"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+    <Button
+        android:text="Recalibrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:id="@+id/recalibrate"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginLeft="225dp"
-            android:id="@+id/snowdepthswitch"
-            android:layout_below="@+id/recalibrate"/>
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="225dp"
+        android:id="@+id/snowdepthswitch"
+        android:layout_below="@+id/recalibrate"/>
 
 
     <Switch
@@ -43,21 +43,21 @@
         android:layout_alignStart="@+id/snowdepthswitch" />
 
     <Switch
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/enableSnowWarning"
         android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/showUserOnMap"
         android:layout_alignStart="@+id/showUserOnMap" />
 
     <TextView
-            android:layout_width="200dp"
-            android:layout_height="100dp"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
         android:layout_marginTop="34dp"
-            android:id="@+id/baseheight"
-            android:textSize="18sp"
-            android:textColor="@color/authui_inputTextColorDark"
+        android:id="@+id/baseheight"
+        android:textSize="18sp"
+        android:textColor="@color/authui_inputTextColorDark"
         android:layout_below="@+id/enableSnowWarning"
         android:layout_alignLeft="@+id/enableSnowWarning"
         android:layout_alignStart="@+id/enableSnowWarning"
@@ -67,19 +67,19 @@
         android:layout_alignEnd="@+id/enableSnowWarning" />
 
     <TextView
-            android:text="Base Height (in)"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView4"
-            android:textSize="18sp"
-            android:textColor="@color/authui_inputTextColorDark"
-            android:textAlignment="center"
-        android:layout_alignBottom="@+id/baseheight"
+        android:text="Base Height (cm)"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:textSize="18sp"
+        android:textColor="@color/authui_inputTextColorDark"
+        android:textAlignment="center"
         android:layout_alignLeft="@+id/textView3"
         android:layout_alignStart="@+id/textView3"
         android:layout_alignTop="@+id/baseheight"
         android:layout_alignRight="@+id/textView3"
-        android:layout_alignEnd="@+id/textView3" />
+        android:layout_alignEnd="@+id/textView3"
+        android:layout_alignBottom="@+id/baseheight" />
 
     <TextView
         android:text="Display Snow Depth"
@@ -133,6 +133,33 @@
         android:id="@+id/requestService"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Snow Threshold (cm)"
+        android:textSize="12sp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:id="@+id/setSnowThreshold"
+        android:layout_above="@+id/requestService"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="11dp"
+        android:layout_alignRight="@+id/textView4"
+        android:layout_alignEnd="@+id/textView4" />
+
+    <TextView
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView8"
+        android:textSize="18sp"
+        android:textColor="@color/authui_inputTextColorDark"
+        android:layout_alignBottom="@+id/setSnowThreshold"
+        android:layout_alignTop="@+id/setSnowThreshold"
+        android:layout_alignLeft="@+id/baseheight"
+        android:layout_alignStart="@+id/baseheight"
+        android:layout_alignRight="@+id/baseheight"
+        android:layout_alignEnd="@+id/baseheight" />
 
 
 </RelativeLayout>
