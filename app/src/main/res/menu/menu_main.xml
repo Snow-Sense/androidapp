@@ -27,6 +27,10 @@
         android:orderInCategory="100"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/action_contacterrequest"
+        android:title="Job Window"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
 
     <item android:id="@+id/action_signout"
         android:title="Sign Out"
